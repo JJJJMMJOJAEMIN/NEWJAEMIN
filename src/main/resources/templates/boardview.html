@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <meta charset="UTF-8">
+    <title>상세 페이지</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 80%;
+            margin: 10px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            margin: 10px 2px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <script>
+        $('#b
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>게시글 상세 정보</h2>
+    <table>
+        <tr>
+            <th>번호</th>
+            <td th:text="${board.idx}"></td>
+        </tr>
+        <tr>
+            <th>아이디</th>
+            <td th:text="${board.member.id}"></td>
+        </tr>
+  <!--      <tr>
+            <th>카테고리</th>
+            <td th:text="${board.category}"></td>
+        </tr>-->
+        <tr>
+            <th>제목</th>
+            <td th:text="${board.title}"></td>
+        </tr>
+        <tr>
+            <th>이름</th>
+            <td th:text="${board.name}"></td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td th:text="${board.content}"></td>
+        </tr>
+        <tr>
+            <th>파일</th>
+            <td>
+                 <p th:each="file : ${board.files}" th:text="${file.filename}"></p>
+            </td>
+        </tr>
+        <tr><button id="loadButton">Load Content</button></tr>
+    </table>
+
+    <a href="/board/list" class="btn">리스트 보기</a>
+    <a th:href="@{/board/delete/{idx}(idx=${board.idx})}" class="btn">글 삭제</a>
+    <a th:href="@{/board/modify/{idx}(idx=${board.idx})}" class="btn">글 수정</a>
+</div>
+<div id="content"></div>
+
+<script>
+    // 문서가 준비되면 실행할 함수를 세팅합니다.
+    $(document).ready(function(){
+        // 버튼에 클릭 이벤트 리스너 추가
+        $("#loadButton").click(function(){
+            // AJAX 요청 실행
+            $.ajax({
+                url: "comment.html", // 로드할 페이지 URL
+                type: "GET", // HTTP 메소드, GET 또는 POST
+                success: function(result){
+                    // 요청 성공 시, 결과를 "#content" div에 로드
+                    $("#content").html(result);
+                },
+                error: function(){
+                    // 요청 실패 시, 오류 메시지를 출력
+                    $("#content").html("Error loading content.");
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

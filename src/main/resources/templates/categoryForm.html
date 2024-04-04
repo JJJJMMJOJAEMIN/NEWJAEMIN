@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <form action="/category/writepro" method="post">
+    <h3>카테고리 등록</h3>
+    <p>카테고리</p>
+        <h3>카테고리 이름</h3><p><input type="text" name="name"></p>
+        <input type="hidden" name="parentIdx"  >
+        <button type="submit" class="btns"><span>작성</span></button>
+        <button class="btns"><a href="/board/list"><span>리스트 보기</span></a></button>
+
+    </form>
+</div>
+</body>
+</html>
+
+<!-- idx category parentIdx
+      1    상의       null
+      2    하의       null
+      3    반팔티       1
+      4    반바지       2
+
+
+      idx category parentIdx
+      1    상의       null
+      2    하의       null
+      3    반팔티       1-1-0
+      4    반바지       2-1-0
+
+
+
+
+-->

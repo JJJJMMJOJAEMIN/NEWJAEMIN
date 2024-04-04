@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>카테고리별 제품 보기</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<select id="categorySelect">
+    <option value="1">카테고리 1</option>
+    <option value="2">카테고리 2</option>
+    <!-- 여기에 더 많은 카테고리 옵션이 올 수 있습니다. -->
+</select>
+<div id="productList"></div>
+
+<script>
+    $(document).ready(function(){
+        $('#categorySelect').change(function(){
+            var selectedCategoryIdx = $(this).val();
+
+            $.ajax({
+                type: "GET",
+                url: "/getProductsByCategory",
+                data: { categoryIdx: selectedCategoryIdx },
+                success: function(data) {
+                    $('#productList').empty();
+                    $.each(data, function(index, product){
+                        $('#productList').append('<p>' + product.name + '</p>');
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

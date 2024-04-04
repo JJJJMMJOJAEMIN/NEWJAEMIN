@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+ <form th:action="@{/update/{idx}(idx=${category.idx})}" method="post">
+    <input type="hidden" name="idx" th:value="${category.idx}">
+    <h3>부모 카테고리</h3><input type="text"  th:value="${category.name}" readonly>
+    <h3>자식 카테고리</h3><input type="text" name="childName">
+    <input type="hidden" name="parentIdx" th:value="${category.idx}">
+    <button type="submit">전송</button>
+</form>
+
+</body>
+</html>

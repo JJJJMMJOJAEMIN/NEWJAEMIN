@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시물 작성폼</title>
+    <style>
+        .layout {
+            width: 500px;
+            margin: 0 auto;
+            margin-top: 40px;
+        }
+
+        .layout input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .layout textarea {
+            width: 100%;
+            margin-top: 10px;
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <form th:action="@{/member/m_update/{idx}(idx = ${member.idx})}" method="post">
+        <h1>살려주세요</h1>
+        <input type="hidden" name="idx" th:value="${member.idx}">
+        <h3>아이디</h3><input name="id" type="text" th:value="${member.id}">
+        <h3>비밀번호</h3><input name="pw" type="password" th:value="${member.pw}">
+        <h3>나이</h3><input name="email" type="text" th:value="${member.email}">
+        <h3>이름</h3><input name="name" type="text" th:value="${member.name}">
+        <button type="submit">작성</button>
+
+    </form>
+    <button><a href="/member/m_list">리스트 보기</a></button>
+</div>
+</body>
+</html>

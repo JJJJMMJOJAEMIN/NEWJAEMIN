@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 리스트</title>
+    <style>
+        th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<table style="margin: 0 auto; border: 1px solid black;">
+    <tr>
+        <th>번호</th>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>가입날짜</th>
+    </tr>
+    <tr th:each="data : ${dataList}">
+        <td th:text="${data.idx}"></td>
+        <td><a th:href="@{/view/m_view/{idx}(idx=${data.idx})}" th:text="${data.id}"></a></td>
+        <td th:text="${data.name}"></td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td>    <button><a href="/view/join">회원가입</a></button>
+        <td>    <button><a href="/board/write">글쓰기</a></button>
+        <td>    <button><a href="/view/login">로그인</a></button>
+        <td>    <button><a href="/board/list">글 리스트</a></button>
+        </td>
+    </tr>
+
+</table>
+
+<th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+    <a th:if="${page != nowPage}" th:href="@{/view/m_list(page = ${page -1})}" th:text="${page}"></a>
+    <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+</th:block>
+
+</body>
+</html>

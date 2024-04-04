@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+    <style>
+        table {
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .btn {
+            margin: 10px;
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: black;
+            border: 1px solid #ddd;
+        }
+
+        .btn:hover {
+            background-color: #ddd;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .search-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logout-btn {
+            width: 200px;
+            margin: 20px auto;
+            display: block;
+            padding: 10px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff3333;
+        }
+
+
+    </style>
+</head>
+<body>
+
+
+<!--
+    상위 카테고리를 누르면(idx)가져오기 성공| ajax 가 idx 기준으로 값을 찾아서 찾으면 dto 로 받은후에 json 형식으로 반환한 담에 이 데이터를 기준으로 자바스크립트를 통해서 html 재구성
+-->
+<!--parentIdx  > ajax > parentIdx 기준 > 값 찾아서 > dto 로 받은후 > json 형식으로 반환 > 이 데이터를 기준으로 자바 스크립트를 통해서 html 재구성-->
+
+    <table>
+        <tr th:each="category :  ${category}">
+            <td><a th:href="@{/board/view/{idx}(idx=${category.idx})}" th:text="${category.name}"></a></td>
+        </tr>
+
+    </table>
+
+
+<table>
+    <thead>
+    <tr>
+        <th>글 번호</th>
+        <th>아이디</th>
+        <th>제목</th>
+        <th>이름</th>
+        <th>날짜</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board : ${list}">
+        <td th:text="${board.idx}"></td>
+        <td th:text="${board.member?.id}"></td>
+        <td><a th:href="@{/board/view/{idx}(idx=${board.idx})}" th:text="${board.title}"></a></td>
+        <td th:text="${board.name}"></td>
+        <td th:text="${board.regdate}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="navigation">
+    <button class="btn"><a href="/board/write">상품 등록</a></button>
+</div>
+
+<div class="search-form">
+    <form th:action="@{/board/list}" method="get">
+        <select name="searchType">
+            <option value="all">전체</option>
+            <option value="title">제목</option>
+            <option value="memberId">아이디</option>
+            <option value="name">이름</option>
+        </select>
+        <input type="text" name="searchKeyword">
+        <button type="submit">검색</button>
+    </form>
+</div>
+
+<form method="post" action="/logout">
+
+</form>
+
+<div class="pagination" style="container">
+    <ul>
+        <!-- 이전 버튼 -->
+        <th:block th:if="${not isFirst and param.searchKeyword == null}">
+            <a class="btn prev" th:href="@{/board/list}+'?page='+${nowPage-2}">◀</a>
+        </th:block>
+
+        <!-- 페이지 번호들 -->
+        <div class="page-numbers">
+            <th:block th:if="${param.searchKeyword == null}" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <a th:if="${page != nowPage}" th:href="@{/board/list(page=${page - 1})}" th:text="${page}"></a>
+                <strong th:if="${page == nowPage}" th:text="${page}" style="color: red"></strong>
+            </th:block>
+        </div>
+
+        <!-- 다음 버튼 -->
+        <th:block th:if="${not isLast and param.searchKeyword == null}">
+            <a class="btn next" th:href="@{/board/list}+'?page='+${nowPage}">▶</a>
+        </th:block>
+
+
+        <!-- 검색어가 있을 때의 페이징 처리 -->
+        <th:block th:if="${param.searchKeyword != null}" th:each="page : ${#numbers.sequence(startPage, endPage)}">
+            <a th:if="${page != nowPage}" th:href="@{/board/list(page=${page - 1}, searchKeyword=${param.searchKeyword}, searchType=${param.searchType})}" th:text="${page}"></a>
+            <strong th:if="${page == nowPage}" th:text="${page}" style="color: red"></strong>
+        </th:block>
+
+
+        <!--검색 값이 있을때 그 검색 값에서 이전-->
+        <th:block th:if="${not isFirst and param.searchKeyword != null}">
+            <a class="btn" th:href="@{/board/list(page=${nowPage-2}, searchKeyword=${param.searchKeyword}, searchType=${param.searchType})}">◀</a>
+        </th:block>                     <!-- 이동경로      컨트롤러에서 만든거    검색         파람으로 값 받아서                나오게 한다-->
+
+        <!--검색 값이 있을때 그 검색 값에서 다음-->
+        <th:block th:if="${not isLast and param.searchKeyword != null}">
+            <a class="btn" th:href="@{/board/list(page=${nowPage}, searchKeyword=${param.searchKeyword}, searchType=${param.searchType})}">▶</a>
+        </th:block>                     <!-- 이동경로      컨트롤러에서 만든거    검색         파람으로 값 받아서                나오게 한다-->
+    </ul>
+</div>
+
+<div id="buttonContainer"></div>
+
+<script>
+    var memberId = null;
+
+    var container = document.getElementById('buttonContainer');
+
+    if(memberId != null){
+        container.innerHTML = '<button class="logout-btn" type="submit">로그아웃</button>';
+    }else{
+        container.innerHTML = '<button class="login-btn" type="submit" onclick="location.href=\'login.html\'">로그인</button>';
+    }
+</script>
+
+</body>
+</html>

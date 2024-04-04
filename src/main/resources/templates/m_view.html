@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<style>
+    .layout {
+        width: 500px;
+        margin: 0 auto;
+        margin-top: 40px;
+    }
+
+    .layout input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .layout textarea {
+        width: 100%;
+        margin-top: 10px;
+        min-height: 300px;
+    }
+</style>
+<table style="margin: 0 auto; border: 1px solid black;">
+    <tr>
+        <th>번호</th>
+        <th>아이디</th>
+        <th>비밀번호</th>
+        <th>이메일</th>
+        <th>이름</th>
+    </tr>
+    <tr>
+        <td th:text="${member.idx}"></td>
+        <td th:text="${member.id}"></td>
+        <td th:text="${member.pw}"></td>
+        <td th:text="${member.email}"></td>
+        <td th:text="${member.name}"></td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td><button><a href="/view/m_list">리스트 보기</a></button></td>
+        <td><button><a th:href="@{/view/m_delete(idx=${member.idx})}">글 삭제</a></button></td>
+        <td><button><a th:href="@{/view/m_modify/{idx}(idx=${member.idx})}">글 수정</a></button></td>
+
+
+
+    </tr>
+
+</table>
+</body>
+</html>

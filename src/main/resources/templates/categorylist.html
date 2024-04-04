@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>카테고리 이름</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${list}">
+        <td th:text="${category.idx}"></td>
+        <td><a th:href="@{/category/view/{idx}(idx=${category.idx})}" th:text="${category.name}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
